@@ -15,7 +15,7 @@ void main(){
   print(name);
   print(name);
 
-  /* Menggunakan Deklarasi Variable Langsun */
+  /* Menggunakan Deklarasi Variable Langsung */
 
   String names = 'Kurnia RAIHAN ARDIAN';
 
