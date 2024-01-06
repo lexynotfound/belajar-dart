@@ -1,60 +1,54 @@
 import 'dart:io';
 
-List<String>alphabet =[
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'w',
-  'x',
-  'y',
-  'z'
-];
+String vigenereEncrypt(String text, String key) {
+  String encryptedText = '';
+  int textLength = text.length;
+  int keyLength = key.length;
+
+  for (int i = 0; i < textLength; i++) {
+    var textChar = text.codeUnitAt(i);
+    var keyChar = key.codeUnitAt(i % keyLength);
+
+    var encryptedChar = ((textChar + keyChar) % 26) + 'A'.codeUnitAt(0);
+    encryptedText += String.fromCharCode(encryptedChar);
+  }
+
+  return encryptedText;
+}
+
+String vigenereDecrypt(String text, String key) {
+  String decryptedText = '';
+  int textLength = text.length;
+  int keyLength = key.length;
+
+  for (int i = 0; i < textLength; i++) {
+    var textChar = text.codeUnitAt(i);
+    var keyChar = key.codeUnitAt(i % keyLength);
+
+    var decryptedChar = ((textChar - keyChar + 26) % 26) + 'A'.codeUnitAt(0);
+    decryptedText += String.fromCharCode(decryptedChar);
+  }
+
+  return decryptedText;
+}
 
 void main() {
-      stdout.write("Enter the Caesar key: ");
-      // if the entered k is null, then set k as 0
-      var k = int.parse(stdin.readLineSync() ?? "0");
-      stdout.write("Enter the plaintext: ");
-      // not including the uppercase
-      var plaintext = (stdin.readLineSync() ?? "").toLowerCase();
-      var ciphertext = "";
-      for (var char in plaintext.split('')) {
-        // if the char is a letter, then match the alphabet
-        if (char.contains(RegExp(r'[a-z]'))) {
-          for (var i = 0; i < 26; i++) {
-            if (alphabet[i] == char) {
-              // if the matched letter is 26-k below, then find the letter over k interval
-              if (i < 26 - k) {
-                ciphertext += alphabet[i + k];
-              } else {
-                // if above, return the start point
-                ciphertext += alphabet[i + k - 26];
-              }
-            }
-          }
-        } else {
-          // if not, then simply add it
-          ciphertext += char;
-        }
-      }
-      print("The ciphertext is: $ciphertext");
-    }
+  stdout.write("Enter the text: ");
+  var inputText = (stdin.readLineSync() ?? '').toUpperCase();
+
+  stdout.write("Enter the key: ");
+  var inputKey = (stdin.readLineSync() ?? '').toUpperCase();
+
+  var encryptedText = vigenereEncrypt(inputText, inputKey);
+  print("Encrypted text: $encryptedText");
+
+  stdout.write("Do you want to decrypt this text? (Y/N): ");
+  var choice = (stdin.readLineSync() ?? '').toUpperCase();
+
+  if (choice == 'Y') {
+    var decryptedText = vigenereDecrypt(encryptedText, inputKey);
+    print("Decrypted text: $decryptedText");
+  } else {
+    print("Thank you for using the Vigenère Cipher!");
+  }
+}
